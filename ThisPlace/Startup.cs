@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using ThisPlace.Context;
 using ThisPlace.Contracts;
 using ThisPlace.Repository;
+using ThisPlace.Services;
 
 namespace ThisPlace
 {
@@ -29,6 +30,8 @@ namespace ThisPlace
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddSingleton<DapperContext>();
             services.AddScoped<IPlaceRepository, PlaceRepository>();
             services.AddControllers();
