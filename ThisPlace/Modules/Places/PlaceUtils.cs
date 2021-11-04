@@ -3,8 +3,10 @@ using System.Data;
 using Dapper;
 using ThisPlace.Dto;
 using ThisPlace.Entities;
+using ThisPlace.Modules.Places.Dto;
+using ThisPlace.Modules.Places.Entities;
 
-namespace ThisPlace.utils.Db
+namespace ThisPlace.Modules.Places
 {
     public class PlaceUtils
     {

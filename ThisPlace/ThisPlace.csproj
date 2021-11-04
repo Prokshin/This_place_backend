@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <Folder Include="Resources\Images" />
+      <Folder Include="utils\Db" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using ThisPlace.Entities;
 
-namespace ThisPlace.Entities
+namespace ThisPlace.Modules.Places.Entities
 {
     public class Place
     {

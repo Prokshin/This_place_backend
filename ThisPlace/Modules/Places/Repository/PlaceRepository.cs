@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using ThisPlace.Context;
-using ThisPlace.Contracts;
 using ThisPlace.Dto;
 using ThisPlace.Entities;
-using ThisPlace.utils.Db;
+using ThisPlace.Modules.Places.Dto;
+using ThisPlace.Modules.Places.Entities;
 
-namespace ThisPlace.Repository
+namespace ThisPlace.Modules.Places.Repository
 {
     public class PlaceRepository : IPlaceRepository
     {
@@ -38,6 +37,7 @@ namespace ThisPlace.Repository
             using (var connection = _context.CreateConnection())
             {
                 var place = await connection.QuerySingleOrDefaultAsync<Place>(query, new {id});
+                
                 return place;
             }
         }

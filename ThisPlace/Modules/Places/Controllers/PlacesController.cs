@@ -1,20 +1,21 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ThisPlace.Contracts;
 using ThisPlace.Dto;
+using ThisPlace.Modules.Places.Dto;
+using ThisPlace.Modules.Places.Services;
 
-namespace ThisPlace.Controllers
+namespace ThisPlace.Modules.Places.Controllers
 {
     [Route("api/places")]
     [ApiController]
     public class PlacesController : ControllerBase
     {
-        private readonly IPlaceRepository _placeRepository;
+        private readonly IPlaceService _placeService;
 
-        public PlacesController(IPlaceRepository placeRepository)
+        public PlacesController(IPlaceService placeService)
         {
-            _placeRepository = placeRepository;
+            _placeService = placeService;
         }
 
         [HttpGet]
@@ -22,7 +23,7 @@ namespace ThisPlace.Controllers
         {
             try
             {
-                var places = await _placeRepository.GetPlaces();
+                var places = await _placeService.GetPlaces();
                 return Ok(places);
             }
             catch (Exception e)
@@ -36,7 +37,7 @@ namespace ThisPlace.Controllers
         {
             try
             {
-                var place = await _placeRepository.GetPlaceById(id);
+                var place = await _placeService.GetPlaceById(id);
                 if (place == null)
                 {
                     return NotFound();
@@ -54,7 +55,7 @@ namespace ThisPlace.Controllers
         {
             try
             {
-                var createdPlace = await _placeRepository.CreatePlace(newPlace);
+                var createdPlace = await _placeService.CreatePlace(newPlace);
                 return Ok(createdPlace);
             }
             catch (Exception e)

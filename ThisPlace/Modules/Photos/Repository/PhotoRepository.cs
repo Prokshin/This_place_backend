@@ -10,14 +10,13 @@ namespace ThisPlace.Repository
 {
     public class PhotoRepository : IPhotoRepository
     {
-        
         private readonly DapperContext _context;
 
         public PhotoRepository(DapperContext context)
         {
             _context = context;
         }
-        
+
         public async Task<Guid> AddPhoto(string path, Guid placeId)
         {
             const string query = "INSERT INTO photos (path, placeId) VALUES (@Path, @PlaceId) RETURNING id";
@@ -29,9 +28,20 @@ namespace ThisPlace.Repository
             }
         }
 
-        public Task<IEnumerable<Photo>> GetPhotosByPlaceId(Guid placeId)
+        public async Task<IEnumerable<Photo>> GetPhotosByPlaceId(Guid placeId, int limit)
         {
-            throw new NotImplementedException();
+            var query = "SELECT * FROM photos WHERE placeid = @placeId";
+
+            if (limit > 0)
+            {
+                query += " LIMIT @limit";
+            }
+            
+            using (var connection = _context.CreateConnection())
+            {
+                var photos = await connection.QueryAsync<Photo>(query, new {placeId, limit});
+                return photos;
+            }
         }
     }
 }

@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using ThisPlace.Entities;
-
-namespace ThisPlace.Dto
+namespace ThisPlace.Modules.Places.Dto
 {
     public class PlaceForCreationDto
     {
