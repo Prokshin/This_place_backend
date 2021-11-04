@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -7,6 +8,7 @@ using ThisPlace.Context;
 using ThisPlace.Contracts;
 using ThisPlace.Dto;
 using ThisPlace.Entities;
+using ThisPlace.utils.Db;
 
 namespace ThisPlace.Repository
 {
@@ -21,7 +23,7 @@ namespace ThisPlace.Repository
 
         public async Task<IEnumerable<Place>> GetPlaces()
         {
-            const string query = "SELECT * FROM \"Places\"";
+            const string query = "SELECT * FROM places";
             using (var connection = _context.CreateConnection())
             {
                 var places = await connection.QueryAsync<Place>(query);
@@ -29,9 +31,9 @@ namespace ThisPlace.Repository
             }
         }
 
-        public async Task<Place> GetPlaceById(int id)
+        public async Task<Place> GetPlaceById(Guid id)
         {
-            const string query = "SELECT * FROM \"Places\" WHERE \"Id\" = @Id";
+            const string query = "SELECT * FROM places WHERE Id = @Id";
 
             using (var connection = _context.CreateConnection())
             {
@@ -42,24 +44,14 @@ namespace ThisPlace.Repository
 
         public async Task<Place> CreatePlace(PlaceForCreationDto newPlace)
         {
-            const string query = "INSERT INTO \"Places\" (\"Title\", \"Description\") VALUES (@Title, @Description) RETURNING \"Id\"";
+            const string query = "INSERT INTO places (title, description, longitude, latitude) VALUES (@Title, @Description, @Longitude, @Latitude) RETURNING id";
 
-            var parameters = new DynamicParameters();
-            parameters.Add("Title", newPlace.Title, DbType.String);
-            parameters.Add("Description", newPlace.Description, DbType.String);
+            var parameters = PlaceUtils.GeneratePlaceCreateParameters(newPlace);
 
             using (var connection = _context.CreateConnection())
             {
-                var id = await connection.QueryFirstAsync<int>(query, parameters);
-                
-
-                var createdPlace = new Place()
-                {
-                    Id = id,
-                    Title = newPlace.Title,
-                    Description = newPlace.Description
-                };
-                return createdPlace;
+                var id = await connection.QueryFirstAsync<Guid>(query, parameters);
+                return PlaceUtils.GenerateCreatedPlace(id, newPlace);
             }
         }
     }

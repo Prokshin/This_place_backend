@@ -31,8 +31,8 @@ namespace ThisPlace.Controllers
             }
         }
         
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetPlaceById(int id)
+        [HttpGet("{id:Guid}")]
+        public async Task<IActionResult> GetPlaceById(Guid id)
         {
             try
             {
